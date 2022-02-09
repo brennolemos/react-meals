@@ -1,17 +1,25 @@
+import { useState } from 'react';
+import Cart from './components/Cart/Cart';
 import Header from './components/Layout/Header';
 import Meals from './components/Meals/Meals';
 
 import './App.css';
-import Cart from './components/Cart/Cart';
-import { useState } from 'react';
 
 function App() {
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [cartIsShown, setCartIsShown] = useState(false);
+
+  const showCartHandler = () => {
+    setCartIsShown(true);
+  };
+
+  const hideCartHandler = () => {
+    setCartIsShown(false);
+  };
 
   return (
     <div className="App">
-      {isModalOpen && <Cart onClose={() => setIsModalOpen(false)} />}
-      <Header />
+      {cartIsShown && <Cart onClose={hideCartHandler} />}
+      <Header onShowCart={showCartHandler} />
       <main>
         <Meals />
       </main>

@@ -1,4 +1,4 @@
-import classes from './CartItem.module.css';
+import classes from './CartItem.module.scss';
 
 type CartItemProps = {
   price: number,

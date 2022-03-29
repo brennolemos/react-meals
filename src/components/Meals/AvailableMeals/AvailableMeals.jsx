@@ -6,10 +6,15 @@ import styles from './AvailableMeals.module.scss';
 const AvailableMeals = () => {
   const [meals, setMeals] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchMeals = async () => {
       const response = await fetch(process.env.REACT_APP_API_URL);
+      if (!response.ok) {
+        throw new Error('Something went wrong!');
+      }
+
       const responseData = await response.json();
 
       const loadedMeals = [];
@@ -26,7 +31,10 @@ const AvailableMeals = () => {
       setIsLoading(false);
     }
 
-    fetchMeals();
+    fetchMeals().then().catch((error) => {
+      setIsLoading(false);
+      setError(error.message);
+    });
   }, []);
 
   if (isLoading) {
@@ -34,7 +42,15 @@ const AvailableMeals = () => {
       <section className={styles.mealsLoading}>
         <p>Loading...</p>
       </section>
-    )
+    );
+  }
+
+  if (error) {
+    return (
+      <section className={styles.mealsError}>
+        <p>{error}</p>
+      </section>
+    );
   }
 
   const mealsList = meals.map((meal) => (
